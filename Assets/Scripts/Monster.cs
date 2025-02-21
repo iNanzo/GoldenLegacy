@@ -1,39 +1,30 @@
 using UnityEngine;
-using TMPro; // Use TextMeshPro
 
 public class Monster : MonoBehaviour
 {
-    public string monsterName = "Monster"; // Default name
-    public int maxHealth = 5;
+    public MonsterData monsterData; // ScriptableObject reference
     private int currentHealth;
     private StateMachine stateMachine;
     private Player player;
 
-    public int damage = 1;
-    public int goldReward = 10;
-    public TMP_Text monsterHPText; // UI Text for Monster HP
-
     void Start()
     {
-        currentHealth = maxHealth;
         player = Object.FindFirstObjectByType<Player>();
 
-        // Auto-find the HP Text in the scene (must be named "MonsterHPText")
-        monsterHPText = Object.FindFirstObjectByType<TMP_Text>();
+        // Ensure HP is set before updating UI
+        currentHealth = Random.Range(monsterData.minHP, monsterData.maxHP + 1);
 
-        if (monsterHPText == null)
+        // If the state machine exists, update the UI immediately
+        if (stateMachine != null)
         {
-            Debug.LogError("Monster HP Text not found! Make sure it's named 'MonsterHPText' in the Canvas.");
-        }
-        else
-        {
-            UpdateMonsterHPText();
+            stateMachine.UpdateMonsterHPText();
         }
     }
 
     public void SetStateMachine(StateMachine machine)
     {
         stateMachine = machine;
+        stateMachine.UpdateMonsterHPText(); // Ensure HP text updates when monster appears
     }
 
     void OnMouseDown()
@@ -49,8 +40,7 @@ public class Monster : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
-        UpdateMonsterHPText();
-        Debug.Log($"{monsterName} took {damage} damage! Current Health: {currentHealth}");
+        stateMachine.UpdateMonsterHPText(); // Update HP text after taking damage
 
         if (currentHealth <= 0)
         {
@@ -62,31 +52,47 @@ public class Monster : MonoBehaviour
     {
         if (player != null)
         {
-            player.TakeDamage(damage);
+            int damageDealt = Random.Range(monsterData.minDamage, monsterData.maxDamage + 1);
+            player.TakeDamage(damageDealt);
+            Debug.Log($"{monsterData.monsterName} attacks for {damageDealt} damage!");
         }
     }
 
     void Die()
     {
-        Debug.Log($"{monsterName} defeated!");
-        player.AddGold(goldReward);
-        player.ResetHealth();
-        stateMachine.MonsterDefeated();
+        Debug.Log($"{monsterData.monsterName} defeated!");
 
-        // Clear the Monster HP Text when the monster dies
-        if (monsterHPText != null)
+        // Give gold based on max HP
+        int goldReward = monsterData.GetGoldReward();
+        player.AddGold(goldReward);
+        Debug.Log($"Player received {goldReward} gold!");
+
+        // Drop a random item from the loot table
+        if (monsterData.lootTable != null && monsterData.lootTable.Length > 0)
         {
-            monsterHPText.SetText("");
+            string droppedItem = monsterData.lootTable[Random.Range(0, monsterData.lootTable.Length)];
+            Debug.Log($"{monsterData.monsterName} dropped: {droppedItem}");
+            player.AddToInventory(droppedItem);
+        }
+        else
+        {
+            Debug.Log($"{monsterData.monsterName} had no loot.");
         }
 
+        player.ResetHealth();
+        stateMachine.MonsterDefeated();
         Destroy(gameObject);
     }
 
-    void UpdateMonsterHPText()
+    // Get Monster Name for HP Display
+    public string GetMonsterName()
     {
-        if (monsterHPText != null)
-        {
-            monsterHPText.SetText($"{monsterName}: {currentHealth} HP");
-        }
+        return monsterData.monsterName;
+    }
+
+    // Get Current HP for HP Display
+    public int GetCurrentHP()
+    {
+        return currentHealth;
     }
 }

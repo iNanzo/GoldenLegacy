@@ -101,7 +101,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04f22f26cc364cd4c9e0d978bacf341b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 5
+  monsterData: {fileID: 11400000, guid: f8186a48f4a7ebb4399f1a0d959ff36e, type: 2}
+  monsterHPTextPrefab: {fileID: 9133096685452436633, guid: eb55897aea4905d449004f6b1db22d9c, type: 3}
 --- !u!61 &4060870812949985877
 BoxCollider2D:
   m_ObjectHideFlags: 0

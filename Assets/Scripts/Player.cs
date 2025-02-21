@@ -7,8 +7,9 @@ public class Player : MonoBehaviour
     private int currentHealth;
     public int gold = 0;
 
-    public TMP_Text healthText;
-    public TMP_Text goldText;
+    public TMP_Text healthText; // UI for player HP
+    public TMP_Text goldText; // UI for player Gold
+    public PlayerInventory inventory;
 
     private StateMachine stateMachine;
 
@@ -40,7 +41,10 @@ public class Player : MonoBehaviour
     {
         Debug.Log("Player died!");
         ResetHealth();
-        stateMachine.PlayerDied();
+        if (stateMachine != null)
+        {
+            stateMachine.PlayerDied();
+        }
     }
 
     public void AddGold(int amount)
@@ -58,7 +62,23 @@ public class Player : MonoBehaviour
 
     void UpdateUI()
     {
-        if (healthText != null) healthText.SetText($"HP: {currentHealth}");
-        if (goldText != null) goldText.SetText($"Gold: {gold}");
+        if (healthText != null) 
+            healthText.SetText($"HP: {currentHealth}");
+        
+        if (goldText != null) 
+            goldText.SetText($"Gold: {gold}");
+    }
+
+    public void AddToInventory(string item)
+    {
+        if (inventory != null)
+        {
+            inventory.AddItem(item);
+            Debug.Log($"Added {item} to inventory!");
+        }
+        else
+        {
+            Debug.LogError("Inventory reference is missing! Assign it in the Inspector.");
+        }
     }
 }
