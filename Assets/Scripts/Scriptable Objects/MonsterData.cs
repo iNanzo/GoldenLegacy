@@ -5,6 +5,13 @@ public enum MonsterRarity { Common, Uncommon, Rare, Legendary }
 public enum MonsterTrait { None, Berserk, Vampiric, Golden }
 public enum MonsterSize { Normal, Large, Small }
 
+[System.Serializable]
+public class LootEntry
+{
+    public MaterialData material;
+    public float dropChance; // Drop weight in percentage (0-100%)
+}
+
 [CreateAssetMenu(fileName = "NewMonster", menuName = "Monster/Create New Monster")]
 public class MonsterData : ScriptableObject
 {
@@ -20,7 +27,7 @@ public class MonsterData : ScriptableObject
     public int maxDamage = 3;
 
     [Header("Loot Settings")]
-    public string[] lootTable; // List of possible loot items
+    public LootEntry[] materialLootTable; // Stores materials with drop rates
 
     [Header("Trait Settings")]
     public MonsterTrait[] possibleTraits; // Primary traits
@@ -58,5 +65,4 @@ public class MonsterData : ScriptableObject
 
         return Mathf.RoundToInt(maxHP * multiplier);
     }
-
 }

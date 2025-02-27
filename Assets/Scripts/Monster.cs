@@ -129,20 +129,19 @@ public class Monster : MonoBehaviour
         player.AddGold(goldReward);
         Debug.Log($"Player received {goldReward} gold!");
 
-        // Golden monsters drop everything in their loot table
-        if (currentTrait == MonsterTrait.Golden)
+        // Handle item drop with drop rates
+        if (monsterData.materialLootTable.Length > 0)
         {
-            Debug.Log($"{GetMonsterName()} dropped ALL loot items!");
-            foreach (string item in monsterData.lootTable)
+            foreach (var lootEntry in monsterData.materialLootTable)
             {
-                player.AddToInventory(item);
+                if (Random.value * 100 <= lootEntry.dropChance)
+                {
+                    MaterialData droppedItem = Instantiate(lootEntry.material);
+                    droppedItem.AssignRandomTraitAndSize();
+                    player.AddToInventory(droppedItem.GetMaterialDescription());
+                    Debug.Log($"{GetMonsterName()} dropped: {droppedItem.GetMaterialDescription()}");
+                }
             }
-        }
-        else if (monsterData.lootTable.Length > 0)
-        {
-            string droppedItem = monsterData.lootTable[Random.Range(0, monsterData.lootTable.Length)];
-            player.AddToInventory(droppedItem);
-            Debug.Log($"{GetMonsterName()} dropped: {droppedItem}");
         }
 
         player.ResetHealth();
