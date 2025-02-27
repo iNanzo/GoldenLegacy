@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class Monster : MonoBehaviour
 {
@@ -158,19 +159,20 @@ public class Monster : MonoBehaviour
     // Returns the monster's formatted name with traits and size
     public string GetMonsterName()
     {
-        string prefix = "";
+        List<string> modifiers = new List<string>();
 
-        // Add size modifier if not normal
-        if (sizeModifier == MonsterSize.Large) prefix += "Large ";
-        else if (sizeModifier == MonsterSize.Small) prefix += "Small ";
+        // Add size modifier if applicable
+        if (sizeModifier != MonsterSize.Normal)
+            modifiers.Add(sizeModifier.ToString());
 
-        // Add trait if not None
-        if (currentTrait == MonsterTrait.Berserk) prefix += "Berserk ";
-        else if (currentTrait == MonsterTrait.Vampiric) prefix += "Vampiric ";
-        else if (currentTrait == MonsterTrait.Golden) prefix += "Golden ";
+        // Add trait if applicable
+        if (currentTrait != MonsterTrait.None)
+            modifiers.Add(currentTrait.ToString());
 
-        return prefix + monsterData.monsterName; // Final formatted name
+        // Combine all parts and return the name
+        return string.Join(" ", modifiers) + " " + monsterData.monsterName;
     }
+
 
     // Returns the monster's current HP for UI display
     public int GetCurrentHP()

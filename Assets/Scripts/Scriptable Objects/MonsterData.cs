@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public enum MonsterRarity { Common, Uncommon, Rare, Legendary }
 public enum MonsterTrait { None, Berserk, Vampiric, Golden }
@@ -28,16 +29,34 @@ public class MonsterData : ScriptableObject
     // Gold reward calculation
     public int GetGoldReward(MonsterTrait trait, MonsterSize size)
     {
-        int baseGold = maxHP; // Base gold = monster's max HP
+        float multiplier = 1f;
 
-        // Apply trait-based modifiers
-        if (trait == MonsterTrait.Golden) baseGold = Mathf.RoundToInt(baseGold * 1.5f);
-        if (trait == MonsterTrait.Berserk || trait == MonsterTrait.Vampiric) baseGold = Mathf.RoundToInt(baseGold * 1.2f);
-        
-        // Apply size modifiers
-        if (size == MonsterSize.Large) baseGold = Mathf.RoundToInt(baseGold * 1.1f);
-        if (size == MonsterSize.Small) baseGold = Mathf.RoundToInt(baseGold * 0.9f);
+        // Trait-based multipliers
+        Dictionary<MonsterTrait, float> traitMultipliers = new Dictionary<MonsterTrait, float>
+        {
+            { MonsterTrait.Golden, 1.5f },
+            { MonsterTrait.Berserk, 1.2f },
+            { MonsterTrait.Vampiric, 1.2f }
+        };
 
-        return baseGold;
+        // Size-based multipliers
+        Dictionary<MonsterSize, float> sizeMultipliers = new Dictionary<MonsterSize, float>
+        {
+            { MonsterSize.Large, 1.1f },
+            { MonsterSize.Small, 0.9f }
+        };
+
+        if (traitMultipliers.TryGetValue(trait, out float traitMult))
+        {
+            multiplier *= traitMult;
+        }
+
+        if (sizeMultipliers.TryGetValue(size, out float sizeMult))
+        {
+            multiplier *= sizeMult;
+        }
+
+        return Mathf.RoundToInt(maxHP * multiplier);
     }
+
 }
