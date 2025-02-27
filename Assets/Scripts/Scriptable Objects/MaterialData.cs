@@ -27,11 +27,11 @@ public class MaterialData : ScriptableObject
     {
         List<string> modifiers = new List<string>();
 
-        if (materialTrait != MaterialTrait.None)
-            modifiers.Add(materialTrait.ToString());
-
         if (materialSize != MaterialSize.Normal)
             modifiers.Add(materialSize.ToString());
+
+        if (materialTrait != MaterialTrait.None)
+            modifiers.Add(materialTrait.ToString());
 
         modifiers.Add(materialType.ToString());
 
