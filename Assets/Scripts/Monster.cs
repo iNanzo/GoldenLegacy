@@ -51,7 +51,6 @@ public class Monster : MonoBehaviour
 
         Debug.Log($"{GetMonsterName()} spawned with {currentHealth} HP, {attackPower} Attack, and Trait: {currentTrait}");
 
-        // 🛠 FIX: Ensure the UI updates after all values are set
         if (stateMachine != null)
         {
             stateMachine.UpdateMonsterHPText();
@@ -61,7 +60,6 @@ public class Monster : MonoBehaviour
     public void SetStateMachine(StateMachine machine)
     {
         stateMachine = machine;
-        // Ensure UI updates after setting the state machine
         if (stateMachine != null)
         {
             stateMachine.UpdateMonsterHPText();
@@ -70,9 +68,8 @@ public class Monster : MonoBehaviour
 
     void OnMouseDown()
     {
-        TakeDamage(1); // Player deals 1 damage
-
-        if (currentHealth > 0) // Monster retaliates if alive
+        TakeDamage(1);
+        if (currentHealth > 0)
         {
             Retaliate();
         }
@@ -81,13 +78,10 @@ public class Monster : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
-
-        // Ensure HP text updates correctly
         if (stateMachine != null)
         {
             stateMachine.UpdateMonsterHPText();
         }
-
         if (currentHealth <= 0)
         {
             Die();
@@ -102,21 +96,21 @@ public class Monster : MonoBehaviour
 
             if (currentTrait == MonsterTrait.Berserk)
             {
-                damageDealt = Mathf.RoundToInt(damageDealt * 1.5f); // 50% more damage
+                damageDealt = Mathf.RoundToInt(damageDealt * 1.5f);
             }
 
             if (sizeModifier == MonsterSize.Large)
             {
-                damageDealt = Mathf.RoundToInt(damageDealt * 1.05f); // 5% more damage
+                damageDealt = Mathf.RoundToInt(damageDealt * 1.05f);
             }
             else if (sizeModifier == MonsterSize.Small)
             {
-                damageDealt = Mathf.RoundToInt(damageDealt * 0.9f); // 10% less damage
+                damageDealt = Mathf.RoundToInt(damageDealt * 0.9f);
             }
 
             if (currentTrait == MonsterTrait.Vampiric)
             {
-                int healAmount = Mathf.RoundToInt(damageDealt * 0.1f); // Heals 10% of damage dealt
+                int healAmount = Mathf.RoundToInt(damageDealt * 0.1f);
                 currentHealth += healAmount;
                 Debug.Log($"{GetMonsterName()} healed for {healAmount} HP!");
             }

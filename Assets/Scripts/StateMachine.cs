@@ -108,5 +108,4 @@ public class StateMachine : MonoBehaviour
                 break;
         }
     }
-
 }
