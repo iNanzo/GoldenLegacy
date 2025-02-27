@@ -1,31 +1,52 @@
 using UnityEngine;
-using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class MonsterSpawner : MonoBehaviour
 {
-    public GameObject monsterPrefab; // Assign the monster prefab in the Inspector
-    public Transform spawnPoint; // Set a spawn location in the Inspector (optional)
-    public Button spawnButton; // Assign the UI Button in the Inspector
+    public GameObject monsterPrefab;
+    public Transform spawnPoint;
+    public MonsterData[] monsterPool;
 
-    void Start()
+    private Dictionary<MonsterRarity, int> rarityWeights = new Dictionary<MonsterRarity, int>()
     {
-        // Ensure the button is assigned and add a listener to the onClick event
-        if (spawnButton != null)
+        { MonsterRarity.Common, 60 },    
+        { MonsterRarity.Uncommon, 25 },  
+        { MonsterRarity.Rare, 10 },      
+        { MonsterRarity.Legendary, 5 }   
+    };
+
+    public void SpawnMonster()
+    {
+        if (monsterPool.Length == 0)
         {
-            spawnButton.onClick.AddListener(SpawnMonster);
+            Debug.LogError("No monsters assigned to this zone!");
+            return;
+        }
+
+        MonsterData selectedMonster = GetRandomMonsterByRarity();
+        if (selectedMonster == null) return;
+
+        GameObject newMonster = Instantiate(monsterPrefab, spawnPoint.position, Quaternion.identity);
+        Monster monsterScript = newMonster.GetComponent<Monster>();
+
+        if (monsterScript != null)
+        {
+            monsterScript.monsterData = selectedMonster;
         }
     }
 
-    void SpawnMonster()
+    private MonsterData GetRandomMonsterByRarity()
     {
-        if (monsterPrefab != null)
+        List<MonsterData> weightedMonsters = new List<MonsterData>();
+
+        foreach (MonsterData monster in monsterPool)
         {
-            // Instantiate at a defined spawn point or at the spawner’s position
-            Instantiate(monsterPrefab, spawnPoint != null ? spawnPoint.position : transform.position, Quaternion.identity);
+            if (rarityWeights.TryGetValue(monster.rarity, out int weight))
+            {
+                for (int i = 0; i < weight; i++) weightedMonsters.Add(monster);
+            }
         }
-        else
-        {
-            Debug.LogError("Monster Prefab is not assigned!");
-        }
+
+        return weightedMonsters.Count > 0 ? weightedMonsters[Random.Range(0, weightedMonsters.Count)] : null;
     }
 }
