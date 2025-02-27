@@ -57,6 +57,16 @@ public class Monster : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+        if (stateMachine.zoneActive())
+        {
+            Debug.Log("Destroying monster due to player death.");
+            stateMachine.MonsterDefeated();
+            Destroy(gameObject);
+        }
+    }
+
     public void SetStateMachine(StateMachine machine)
     {
         stateMachine = machine;
@@ -117,10 +127,16 @@ public class Monster : MonoBehaviour
 
             player.TakeDamage(damageDealt);
             Debug.Log($"{GetMonsterName()} attacks for {damageDealt} damage!");
+
+            // ✅ Instead of calling Destroy here, we set a flag for Update() to handle it
+            if (player.GetCurrentHP() <= 0)
+            {
+                Debug.Log("Player died! Monster will despawn when zones reappear.");
+            }
         }
     }
 
-    void Die()
+   void Die()
     {
         Debug.Log($"{GetMonsterName()} defeated!");
 
@@ -132,14 +148,28 @@ public class Monster : MonoBehaviour
         // Handle item drop with drop rates
         if (monsterData.materialLootTable.Length > 0)
         {
-            foreach (var lootEntry in monsterData.materialLootTable)
+            if (currentTrait == MonsterTrait.Golden)
             {
-                if (Random.value * 100 <= lootEntry.dropChance)
+                // Golden monsters drop one of each item in their loot table
+                foreach (var lootEntry in monsterData.materialLootTable)
                 {
                     MaterialData droppedItem = Instantiate(lootEntry.material);
                     droppedItem.AssignRandomTraitAndSize();
                     player.AddToInventory(droppedItem.GetMaterialDescription());
                     Debug.Log($"{GetMonsterName()} dropped: {droppedItem.GetMaterialDescription()}");
+                }
+            }
+            else
+            {
+                foreach (var lootEntry in monsterData.materialLootTable)
+                {
+                    if (Random.value * 100 <= lootEntry.dropChance)
+                    {
+                        MaterialData droppedItem = Instantiate(lootEntry.material);
+                        droppedItem.AssignRandomTraitAndSize();
+                        player.AddToInventory(droppedItem.GetMaterialDescription());
+                        Debug.Log($"{GetMonsterName()} dropped: {droppedItem.GetMaterialDescription()}");
+                    }
                 }
             }
         }

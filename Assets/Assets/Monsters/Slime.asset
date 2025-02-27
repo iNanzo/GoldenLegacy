@@ -13,10 +13,15 @@ MonoBehaviour:
   m_Name: Slime
   m_EditorClassIdentifier: 
   monsterName: Slime
+  rarity: 0
   minHP: 5
   maxHP: 8
   minDamage: 1
   maxDamage: 3
-  lootTable:
-  - Wood
-  - Stone
+  materialLootTable:
+  - material: {fileID: 11400000, guid: fae2944c7c27e6047ac880a03b8440e2, type: 2}
+    dropChance: 30
+  - material: {fileID: 11400000, guid: 7c47ca5137a7fbb4fac25e216f66219f, type: 2}
+    dropChance: 30
+  possibleTraits: 010000000200000003000000
+  canBeLargeOrSmall: 1

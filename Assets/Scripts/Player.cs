@@ -81,4 +81,9 @@ public class Player : MonoBehaviour
             Debug.LogError("Inventory reference is missing! Assign it in the Inspector.");
         }
     }
+
+    public int GetCurrentHP()
+    {
+        return currentHealth;
+    }
 }

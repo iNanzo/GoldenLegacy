@@ -20,7 +20,7 @@ public class StateMachine : MonoBehaviour
     public Transform spawnPoint;
     private GameObject currentMonster;
     private Player player;
-
+    public bool buttonActive = true;
     public TMP_Text monsterHPText; // UI Text for Monster HP
 
     void Start()
@@ -97,6 +97,7 @@ public class StateMachine : MonoBehaviour
                 foreach (var category in spawnCategories)
                 {
                     category.spawnButton.gameObject.SetActive(true);
+                    buttonActive = true;
                 }
                 break;
 
@@ -104,8 +105,14 @@ public class StateMachine : MonoBehaviour
                 foreach (var category in spawnCategories)
                 {
                     category.spawnButton.gameObject.SetActive(false);
+                    buttonActive = false;
                 }
                 break;
         }
+    }
+
+    public bool zoneActive()
+    {
+        return buttonActive;
     }
 }

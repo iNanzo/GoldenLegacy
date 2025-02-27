@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 290e73e6960128d4ebf298ffb71911bd, type: 3}
   m_Name: Leather
   m_EditorClassIdentifier: 
-  materialType: 0
-  minAttack: 0
-  maxAttack: 0
-  hpBonus: 0
-  goldBonus: 0
+  materialType: 4
+  minAttack: 5
+  maxAttack: 10
+  hpBonus: 15
+  goldBonus: 10
   specialEffect: 0
   materialTrait: 0
   materialSize: 0

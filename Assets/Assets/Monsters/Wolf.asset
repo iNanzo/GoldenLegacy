@@ -13,10 +13,15 @@ MonoBehaviour:
   m_Name: Wolf
   m_EditorClassIdentifier: 
   monsterName: Wolf
+  rarity: 1
   minHP: 10
   maxHP: 15
   minDamage: 3
   maxDamage: 5
-  lootTable:
-  - Leather
-  - Bone
+  materialLootTable:
+  - material: {fileID: 11400000, guid: 2dad888f98eeaee499a98060122a6d1e, type: 2}
+    dropChance: 30
+  - material: {fileID: 11400000, guid: 9468be7dfcbbc7244b731175730597f5, type: 2}
+    dropChance: 70
+  possibleTraits: 010000000200000003000000
+  canBeLargeOrSmall: 1

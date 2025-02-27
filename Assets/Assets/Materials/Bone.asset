@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 290e73e6960128d4ebf298ffb71911bd, type: 3}
   m_Name: Bone
   m_EditorClassIdentifier: 
-  materialType: 0
+  materialType: 5
   minAttack: 10
   maxAttack: 15
   hpBonus: 25

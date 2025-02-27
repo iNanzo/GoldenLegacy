@@ -13,10 +13,17 @@ MonoBehaviour:
   m_Name: Goblin
   m_EditorClassIdentifier: 
   monsterName: Goblin
+  rarity: 0
   minHP: 8
   maxHP: 12
-  minDamage: 3
-  maxDamage: 5
-  lootTable:
-  - Wood
-  - Bone
+  minDamage: 2
+  maxDamage: 4
+  materialLootTable:
+  - material: {fileID: 11400000, guid: 7c47ca5137a7fbb4fac25e216f66219f, type: 2}
+    dropChance: 40
+  - material: {fileID: 11400000, guid: fae2944c7c27e6047ac880a03b8440e2, type: 2}
+    dropChance: 20
+  - material: {fileID: 11400000, guid: 2dad888f98eeaee499a98060122a6d1e, type: 2}
+    dropChance: 10
+  possibleTraits: 010000000200000003000000
+  canBeLargeOrSmall: 1

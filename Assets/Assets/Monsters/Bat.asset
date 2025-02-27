@@ -13,10 +13,17 @@ MonoBehaviour:
   m_Name: Bat
   m_EditorClassIdentifier: 
   monsterName: Bat
+  rarity: 1
   minHP: 7
   maxHP: 11
   minDamage: 2
   maxDamage: 3
-  lootTable:
-  - Leather
-  - Stone
+  materialLootTable:
+  - material: {fileID: 11400000, guid: fae2944c7c27e6047ac880a03b8440e2, type: 2}
+    dropChance: 30
+  - material: {fileID: 11400000, guid: 9468be7dfcbbc7244b731175730597f5, type: 2}
+    dropChance: 50
+  - material: {fileID: 11400000, guid: 2dad888f98eeaee499a98060122a6d1e, type: 2}
+    dropChance: 20
+  possibleTraits: 02000000010000000300000002000000
+  canBeLargeOrSmall: 1
