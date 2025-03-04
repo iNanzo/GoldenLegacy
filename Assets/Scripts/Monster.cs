@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 public class Monster : MonoBehaviour
 {
-    public MonsterData monsterData; // ScriptableObject reference
+    public MonsterData monsterData;
     private int currentHealth;
     private int attackPower;
-    private MonsterTrait currentTrait; // Primary trait
-    private MonsterSize sizeModifier; // Size modifier
+    private MonsterTrait currentTrait;
+    private MonsterSize sizeModifier;
     private StateMachine stateMachine;
     private Player player;
 
@@ -18,7 +18,6 @@ public class Monster : MonoBehaviour
         currentHealth = Random.Range(monsterData.minHP, monsterData.maxHP + 1);
         attackPower = Random.Range(monsterData.minDamage, monsterData.maxDamage + 1);
 
-        // Randomly assign a Primary Trait (50% chance to have no trait)
         if (monsterData.possibleTraits.Length > 0 && Random.value > 0.5f)
         {
             currentTrait = monsterData.possibleTraits[Random.Range(0, monsterData.possibleTraits.Length)];
@@ -28,7 +27,6 @@ public class Monster : MonoBehaviour
             currentTrait = MonsterTrait.None;
         }
 
-        // Assign a Size Modifier (50% chance to stay normal)
         if (monsterData.canBeLargeOrSmall)
         {
             float roll = Random.value;
@@ -37,23 +35,27 @@ public class Monster : MonoBehaviour
             else sizeModifier = MonsterSize.Normal;
         }
 
-        // Apply Size Modifiers
-        if (sizeModifier == MonsterSize.Large)
-        {
-            currentHealth = Mathf.RoundToInt(currentHealth * 1.2f); // 20% more HP
-            attackPower = Mathf.RoundToInt(attackPower * 1.05f); // 5% more damage
-        }
-        else if (sizeModifier == MonsterSize.Small)
-        {
-            currentHealth = Mathf.RoundToInt(currentHealth * 0.9f); // 10% less HP
-            attackPower = Mathf.RoundToInt(attackPower * 0.9f); // 10% less damage
-        }
+        ApplySizeModifiers();
 
         Debug.Log($"{GetMonsterName()} spawned with {currentHealth} HP, {attackPower} Attack, and Trait: {currentTrait}");
 
         if (stateMachine != null)
         {
             stateMachine.UpdateMonsterHPText();
+        }
+    }
+
+    void ApplySizeModifiers()
+    {
+        if (sizeModifier == MonsterSize.Large)
+        {
+            currentHealth = Mathf.RoundToInt(currentHealth * 1.2f);
+            attackPower = Mathf.RoundToInt(attackPower * 1.05f);
+        }
+        else if (sizeModifier == MonsterSize.Small)
+        {
+            currentHealth = Mathf.RoundToInt(currentHealth * 0.9f);
+            attackPower = Mathf.RoundToInt(attackPower * 0.9f);
         }
     }
 
@@ -70,10 +72,7 @@ public class Monster : MonoBehaviour
     public void SetStateMachine(StateMachine machine)
     {
         stateMachine = machine;
-        if (stateMachine != null)
-        {
-            stateMachine.UpdateMonsterHPText();
-        }
+        stateMachine?.UpdateMonsterHPText();
     }
 
     void OnMouseDown()
@@ -88,10 +87,8 @@ public class Monster : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
-        if (stateMachine != null)
-        {
-            stateMachine.UpdateMonsterHPText();
-        }
+        stateMachine?.UpdateMonsterHPText();
+
         if (currentHealth <= 0)
         {
             Die();
@@ -103,20 +100,9 @@ public class Monster : MonoBehaviour
         if (player != null)
         {
             int damageDealt = Random.Range(monsterData.minDamage, monsterData.maxDamage + 1);
-
-            if (currentTrait == MonsterTrait.Berserk)
-            {
-                damageDealt = Mathf.RoundToInt(damageDealt * 1.5f);
-            }
-
-            if (sizeModifier == MonsterSize.Large)
-            {
-                damageDealt = Mathf.RoundToInt(damageDealt * 1.05f);
-            }
-            else if (sizeModifier == MonsterSize.Small)
-            {
-                damageDealt = Mathf.RoundToInt(damageDealt * 0.9f);
-            }
+            if (currentTrait == MonsterTrait.Berserk) damageDealt = Mathf.RoundToInt(damageDealt * 1.5f);
+            if (sizeModifier == MonsterSize.Large) damageDealt = Mathf.RoundToInt(damageDealt * 1.05f);
+            else if (sizeModifier == MonsterSize.Small) damageDealt = Mathf.RoundToInt(damageDealt * 0.9f);
 
             if (currentTrait == MonsterTrait.Vampiric)
             {
@@ -136,7 +122,7 @@ public class Monster : MonoBehaviour
         }
     }
 
-   void Die()
+    void Die()
     {
         Debug.Log($"{GetMonsterName()} defeated!");
 
@@ -145,32 +131,14 @@ public class Monster : MonoBehaviour
         player.AddGold(goldReward);
         Debug.Log($"Player received {goldReward} gold!");
 
-        // Handle item drop with drop rates
-        if (monsterData.materialLootTable.Length > 0)
+        foreach (var lootEntry in monsterData.materialLootTable)
         {
-            if (currentTrait == MonsterTrait.Golden)
+            if (currentTrait == MonsterTrait.Golden || Random.value * 100 <= lootEntry.dropChance)
             {
-                // Golden monsters drop one of each item in their loot table
-                foreach (var lootEntry in monsterData.materialLootTable)
-                {
-                    MaterialData droppedItem = Instantiate(lootEntry.material);
-                    droppedItem.AssignRandomTraitAndSize();
-                    player.AddToInventory(droppedItem.GetMaterialDescription());
-                    Debug.Log($"{GetMonsterName()} dropped: {droppedItem.GetMaterialDescription()}");
-                }
-            }
-            else
-            {
-                foreach (var lootEntry in monsterData.materialLootTable)
-                {
-                    if (Random.value * 100 <= lootEntry.dropChance)
-                    {
-                        MaterialData droppedItem = Instantiate(lootEntry.material);
-                        droppedItem.AssignRandomTraitAndSize();
-                        player.AddToInventory(droppedItem.GetMaterialDescription());
-                        Debug.Log($"{GetMonsterName()} dropped: {droppedItem.GetMaterialDescription()}");
-                    }
-                }
+                MaterialData droppedItem = Instantiate(lootEntry.material);
+                droppedItem.AssignRandomTraitAndSize();
+                player.AddToInventory(droppedItem);
+                Debug.Log($"{GetMonsterName()} dropped: {droppedItem.GetMaterialDescription()}");
             }
         }
 
@@ -183,16 +151,8 @@ public class Monster : MonoBehaviour
     public string GetMonsterName()
     {
         List<string> modifiers = new List<string>();
-
-        // Add size modifier if applicable
-        if (sizeModifier != MonsterSize.Normal)
-            modifiers.Add(sizeModifier.ToString());
-
-        // Add trait if applicable
-        if (currentTrait != MonsterTrait.None)
-            modifiers.Add(currentTrait.ToString());
-
-        // Combine all parts and return the name
+        if (sizeModifier != MonsterSize.Normal) modifiers.Add(sizeModifier.ToString());
+        if (currentTrait != MonsterTrait.None) modifiers.Add(currentTrait.ToString());
         return string.Join(" ", modifiers) + " " + monsterData.monsterName;
     }
 

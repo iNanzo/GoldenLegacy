@@ -1,5 +1,5 @@
 using UnityEngine;
-using TMPro; // Use TextMeshPro
+using TMPro;
 
 public class Player : MonoBehaviour
 {
@@ -7,8 +7,8 @@ public class Player : MonoBehaviour
     private int currentHealth;
     public int gold = 0;
 
-    public TMP_Text healthText; // UI for player HP
-    public TMP_Text goldText; // UI for player Gold
+    public TMP_Text healthText;
+    public TMP_Text goldText;
     public PlayerInventory inventory;
 
     private StateMachine stateMachine;
@@ -62,19 +62,19 @@ public class Player : MonoBehaviour
 
     void UpdateUI()
     {
-        if (healthText != null) 
+        if (healthText != null)
             healthText.SetText($"HP: {currentHealth}");
-        
-        if (goldText != null) 
+
+        if (goldText != null)
             goldText.SetText($"Gold: {gold}");
     }
 
-    public void AddToInventory(string item)
+    public void AddToInventory(MaterialData item)
     {
         if (inventory != null)
         {
             inventory.AddItem(item);
-            Debug.Log($"Added {item} to inventory!");
+            Debug.Log($"Added {item.GetMaterialDescription()} to inventory!");
         }
         else
         {
