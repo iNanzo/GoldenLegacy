@@ -14,29 +14,33 @@ public class CraftingSystem : MonoBehaviour
             return;
         }
 
-        // Assign random traits & sizes before crafting
+        // Apply random traits and sizes to each material
         foreach (var material in materials)
         {
             material.AssignRandomTraitAndSize();
         }
-        if (crystal != null) crystal.AssignRandomTraitAndSize();
+        if (crystal != null)
+        {
+            crystal.AssignRandomTraitAndSize();
+        }
 
+        // Assign materials to the recipe for stat calculations
         recipe.requiredMaterials = materials;
         recipe.crystalSlot = crystal;
         recipe.LogCraftedMaterials();
 
-        string craftedItem = GenerateCraftedItemDescription(recipe);
+        string craftedItemDescription = GenerateCraftedItemDescription(recipe);
 
         if (player != null)
         {
-            Debug.Log($"Crafted {recipe.itemType} using: {recipe.GetMaterialLog()}");
-            Debug.Log($"- Attack: {recipe.GetTotalAttack()}");
-            Debug.Log($"- HP: {recipe.GetTotalHP()}");
-            Debug.Log($"- Value: {recipe.GetTotalGoldValue()} gold");
+            Debug.Log($"✅ Crafted {recipe.itemType} using: {recipe.GetMaterialLog()}");
+            Debug.Log($"- Total Attack: {recipe.GetTotalAttack()}");
+            Debug.Log($"- Total HP: {recipe.GetTotalHP()}");
+            Debug.Log($"- Total Value: {recipe.GetTotalGoldValue()} gold");
 
-            // Optionally, you could add the crafted item itself to inventory as a string
-            player.inventory.AddItem(CreateCraftedItemAsMaterial(recipe, craftedItem));
-            Debug.Log($"Added crafted {recipe.itemType} to inventory: {craftedItem}");
+            // Add the crafted item to the player's inventory as a new MaterialData
+            player.inventory.AddItem(CreateCraftedItemAsMaterial(recipe, craftedItemDescription));
+            Debug.Log($"✅ Added crafted {recipe.itemType} to inventory: {craftedItemDescription}");
         }
         else
         {
@@ -49,22 +53,13 @@ public class CraftingSystem : MonoBehaviour
         switch (itemType)
         {
             case CraftableItemType.Sword:
-                if (materials.Length != 2) return false;
-                return true; // Crystal is optional
-
+                return materials.Length == 2; // Crystal is optional
             case CraftableItemType.Helmet:
-                if (materials.Length != 1) return false;
-                return true; // Crystal is optional
-
+                return materials.Length == 1; // Crystal is optional
             case CraftableItemType.Armor:
-                if (materials.Length != 2) return false;
-                if (crystal != null) return false; // No crystal allowed
-                return true;
-
+                return materials.Length == 2 && crystal == null; // No crystal allowed
             case CraftableItemType.Ring:
-                if (materials.Length != 1) return false;
-                return true; // Crystal is optional
-
+                return materials.Length == 1; // Crystal is optional
             default:
                 return false;
         }
@@ -89,10 +84,10 @@ public class CraftingSystem : MonoBehaviour
         craftedMaterial.minAttack = recipe.GetTotalAttack();
         craftedMaterial.hpBonus = recipe.GetTotalHP();
         craftedMaterial.goldBonus = recipe.GetTotalGoldValue();
-        craftedMaterial.materialTrait = MaterialTrait.Flawless; // Optional
+        craftedMaterial.materialTrait = MaterialTrait.Flawless; // Optional or average of materials
         craftedMaterial.materialSize = MaterialSize.Normal;
 
-        Debug.Log($"Crafted item created as MaterialData: {craftedItemDescription}");
+        Debug.Log($"✅ Created crafted item as MaterialData: {craftedItemDescription}");
         return craftedMaterial;
     }
 }

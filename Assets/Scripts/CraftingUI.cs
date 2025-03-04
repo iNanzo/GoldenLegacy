@@ -28,9 +28,17 @@ public class CraftingUI : MonoBehaviour
 
         PopulateRecipeDropdown();
 
-        recipeDropdown.onValueChanged.AddListener(OnRecipeSelected);
-        craftButton.onClick.AddListener(StartMaterialSelection);
-        closeButton.onClick.AddListener(() => craftingPanel.SetActive(false));
+        recipeDropdown.onValueChanged.AddListener(delegate { ResetCraftingPanel(); });
+        craftButton.onClick.AddListener(() =>
+        {
+            ResetCraftingPanel();
+            StartMaterialSelection();
+        });
+        closeButton.onClick.AddListener(() =>
+        {
+            ResetCraftingPanel();
+            craftingPanel.SetActive(false);
+        });
         confirmCraftButton.onClick.AddListener(ConfirmCraft);
         confirmCraftButton.interactable = false;
 
@@ -40,8 +48,25 @@ public class CraftingUI : MonoBehaviour
     public void OpenCraftingPanel()
     {
         craftingPanel.SetActive(true);
-        recipeDropdown.value = 0;
-        OnRecipeSelected(0);
+        ResetCraftingPanel();
+    }
+
+    void ResetCraftingPanel()
+    {
+        selectedMaterials.Clear();
+        selectedCrystal = null;
+        craftResultText.text = "Select a recipe to begin...";
+        confirmCraftButton.interactable = false;
+
+        foreach (Transform child in materialListPanel.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        if (availableRecipes.Count > 0)
+        {
+            selectedRecipe = availableRecipes[recipeDropdown.value];
+        }
     }
 
     void PopulateRecipeDropdown()
@@ -86,12 +111,13 @@ public class CraftingUI : MonoBehaviour
 
         foreach (var material in player.inventory.GetInventoryItems())
         {
+            MaterialData currentMaterial = material;
             GameObject buttonObj = Instantiate(materialButtonPrefab, materialListPanel.transform);
             TMP_Text buttonText = buttonObj.GetComponentInChildren<TMP_Text>();
-            buttonText.text = material.GetMaterialDescription();
+            buttonText.text = currentMaterial.GetMaterialDescription();
 
             Button button = buttonObj.GetComponent<Button>();
-            button.onClick.AddListener(() => OnMaterialSelected(material));
+            button.onClick.AddListener(() => OnMaterialSelected(currentMaterial));
         }
 
         UpdateCraftPreview();
@@ -166,9 +192,22 @@ public class CraftingUI : MonoBehaviour
 
         if (selectedMaterials.Count == requiredCount)
         {
-            int totalAttack = selectedRecipe.GetTotalAttack();
-            int totalHP = selectedRecipe.GetTotalHP();
-            int totalValue = selectedRecipe.GetTotalGoldValue();
+            int totalAttack = 0;
+            int totalHP = 0;
+            int totalValue = 0;
+
+            foreach (var material in selectedMaterials)
+            {
+                totalAttack += material.GetModifiedStat(material.minAttack);
+                totalHP += material.GetModifiedStat(material.hpBonus);
+                totalValue += material.GetModifiedStat(material.goldBonus);
+            }
+            if (selectedCrystal != null)
+            {
+                totalAttack += selectedCrystal.GetModifiedStat(selectedCrystal.minAttack);
+                totalHP += selectedCrystal.GetModifiedStat(selectedCrystal.hpBonus);
+                totalValue += selectedCrystal.GetModifiedStat(selectedCrystal.goldBonus);
+            }
 
             result += $"\n\nReady to craft: {selectedRecipe.itemType}\n" +
                       $"Attack: {totalAttack}, HP: {totalHP}, Value: {totalValue}g";
@@ -187,7 +226,8 @@ public class CraftingUI : MonoBehaviour
     {
         if (selectedMaterials.Count != GetRequiredMaterialCount())
         {
-            Debug.LogError("Not enough materials selected!");
+            Debug.LogError("Not enough materials selected, please re-select recipe.");
+            craftResultText.text = "❌ Not enough materials selected, please re-select recipe.";
             return;
         }
 
@@ -205,7 +245,8 @@ public class CraftingUI : MonoBehaviour
         player.GetComponent<CraftingSystem>().CraftItem(selectedRecipe, selectedMaterials.ToArray(), selectedCrystal);
         craftingPanel.SetActive(false);
 
-        craftResultText.text = $"{selectedRecipe.itemType} added to inventory!";
+        craftResultText.text = $"✅ {selectedRecipe.itemType} added to inventory!";
+        ResetCraftingPanel();
     }
 
     int GetRequiredMaterialCount()
