@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6d2227fb6fce352428e623f786360bc3, type: 3}
-  m_Name: GoblinThief
+  m_Name: Banshee
   m_EditorClassIdentifier: 
-  monsterName: Goblin
-  rarity: 0
-  minHP: 8
-  maxHP: 12
-  minDamage: 2
-  maxDamage: 4
+  monsterName: Banshee
+  rarity: 2
+  minHP: 70
+  maxHP: 90
+  minDamage: 20
+  maxDamage: 30
   materialLootTable:
-  - material: {fileID: 11400000, guid: 7c47ca5137a7fbb4fac25e216f66219f, type: 2}
-    dropChance: 40
-  - material: {fileID: 11400000, guid: fae2944c7c27e6047ac880a03b8440e2, type: 2}
-    dropChance: 20
-  - material: {fileID: 11400000, guid: 2dad888f98eeaee499a98060122a6d1e, type: 2}
+  - material: {fileID: 11400000, guid: 7a8b1bd0827daa64b9d042b2ba66bcf2, type: 2}
+    dropChance: 50
+  - material: {fileID: 11400000, guid: cfb7bf2c03007cd4dac6c09a498324dd, type: 2}
+    dropChance: 30
+  - material: {fileID: 11400000, guid: d30d07da32d65d9419a10bf1793ab6f3, type: 2}
     dropChance: 10
   possibleTraits: 010000000200000003000000
   canBeLargeOrSmall: 1

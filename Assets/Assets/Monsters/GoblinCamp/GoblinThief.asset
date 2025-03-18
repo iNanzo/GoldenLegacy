@@ -10,16 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6d2227fb6fce352428e623f786360bc3, type: 3}
-  m_Name: Ant
+  m_Name: GoblinThief
   m_EditorClassIdentifier: 
-  monsterName: Ant
+  monsterName: Goblin Thief
   rarity: 0
-  minHP: 10
-  maxHP: 15
-  minDamage: 4
-  maxDamage: 5
+  minHP: 8
+  maxHP: 12
+  minDamage: 2
+  maxDamage: 4
   materialLootTable:
+  - material: {fileID: 11400000, guid: 7c47ca5137a7fbb4fac25e216f66219f, type: 2}
+    dropChance: 40
   - material: {fileID: 11400000, guid: fae2944c7c27e6047ac880a03b8440e2, type: 2}
-    dropChance: 30
+    dropChance: 20
+  - material: {fileID: 11400000, guid: 2dad888f98eeaee499a98060122a6d1e, type: 2}
+    dropChance: 10
   possibleTraits: 010000000200000003000000
   canBeLargeOrSmall: 1

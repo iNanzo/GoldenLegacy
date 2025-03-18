@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 290e73e6960128d4ebf298ffb71911bd, type: 3}
   m_Name: Wood
   m_EditorClassIdentifier: 
+  itemType: 0
   materialType: 0
   minAttack: 1
-  maxAttack: 10
-  hpBonus: 10
+  maxAttack: 3
+  hpBonus: 3
   goldBonus: 5
   specialEffect: 0
   materialTrait: 0

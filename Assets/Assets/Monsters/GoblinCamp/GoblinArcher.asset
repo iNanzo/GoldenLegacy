@@ -10,14 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6d2227fb6fce352428e623f786360bc3, type: 3}
-  m_Name: GoblinMage
+  m_Name: GoblinArcher
   m_EditorClassIdentifier: 
-  monsterName: Monster
+  monsterName: Goblin Archer
   rarity: 0
-  minHP: 5
-  maxHP: 10
-  minDamage: 1
-  maxDamage: 3
-  materialLootTable: []
-  possibleTraits: 
+  minHP: 8
+  maxHP: 12
+  minDamage: 11
+  maxDamage: 15
+  materialLootTable:
+  - material: {fileID: 11400000, guid: 7c47ca5137a7fbb4fac25e216f66219f, type: 2}
+    dropChance: 30
+  possibleTraits: 010000000200000003000000
   canBeLargeOrSmall: 1

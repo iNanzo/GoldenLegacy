@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 290e73e6960128d4ebf298ffb71911bd, type: 3}
   m_Name: Stone
   m_EditorClassIdentifier: 
+  itemType: 0
   materialType: 1
-  minAttack: 5
-  maxAttack: 15
-  hpBonus: 20
+  minAttack: 3
+  maxAttack: 5
+  hpBonus: 7
   goldBonus: 10
   specialEffect: 0
   materialTrait: 0

@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6d2227fb6fce352428e623f786360bc3, type: 3}
-  m_Name: Ant
+  m_Name: TwoHeadedGiant
   m_EditorClassIdentifier: 
-  monsterName: Ant
-  rarity: 0
-  minHP: 10
-  maxHP: 15
-  minDamage: 4
-  maxDamage: 5
+  monsterName: Two Headed Giant
+  rarity: 3
+  minHP: 125
+  maxHP: 175
+  minDamage: 30
+  maxDamage: 40
   materialLootTable:
-  - material: {fileID: 11400000, guid: fae2944c7c27e6047ac880a03b8440e2, type: 2}
-    dropChance: 30
+  - material: {fileID: 11400000, guid: 7bd6564d4cd36c64da8c1b8290381e1c, type: 2}
+    dropChance: 10
   possibleTraits: 010000000200000003000000
   canBeLargeOrSmall: 1

@@ -10,14 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6d2227fb6fce352428e623f786360bc3, type: 3}
-  m_Name: GoblinGiant
+  m_Name: GoblinBrute
   m_EditorClassIdentifier: 
-  monsterName: Monster
-  rarity: 0
-  minHP: 5
-  maxHP: 10
-  minDamage: 1
-  maxDamage: 3
-  materialLootTable: []
-  possibleTraits: 
+  monsterName: Goblin Brute
+  rarity: 2
+  minHP: 70
+  maxHP: 100
+  minDamage: 40
+  maxDamage: 50
+  materialLootTable:
+  - material: {fileID: 11400000, guid: 6a75db2eb99b59348b7054b820ce96c3, type: 2}
+    dropChance: 30
+  - material: {fileID: 11400000, guid: 2dad888f98eeaee499a98060122a6d1e, type: 2}
+    dropChance: 25
+  possibleTraits: 010000000200000003000000
   canBeLargeOrSmall: 1

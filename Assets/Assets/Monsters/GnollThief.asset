@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d2227fb6fce352428e623f786360bc3, type: 3}
   m_Name: GnollThief
   m_EditorClassIdentifier: 
-  monsterName: Monster
+  monsterName: Goblin
   rarity: 0
   minHP: 5
   maxHP: 10

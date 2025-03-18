@@ -12,12 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d2227fb6fce352428e623f786360bc3, type: 3}
   m_Name: Hobgoblin
   m_EditorClassIdentifier: 
-  monsterName: Monster
-  rarity: 0
-  minHP: 5
-  maxHP: 10
-  minDamage: 1
-  maxDamage: 3
-  materialLootTable: []
-  possibleTraits: 
+  monsterName: Hobgoblin
+  rarity: 3
+  minHP: 100
+  maxHP: 125
+  minDamage: 30
+  maxDamage: 50
+  materialLootTable:
+  - material: {fileID: 11400000, guid: 7bd6564d4cd36c64da8c1b8290381e1c, type: 2}
+    dropChance: 10
+  - material: {fileID: 11400000, guid: 7bd0ef820a9c2904faf4c4911c1e1855, type: 2}
+    dropChance: 70
+  possibleTraits: 010000000200000003000000
   canBeLargeOrSmall: 1

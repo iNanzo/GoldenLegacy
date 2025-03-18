@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public enum MaterialType { Wood, Stone, Iron, Gold, Leather, Bone, Livingwood, Ruby, Sapphire, Diamond, Dragonscale }
+public enum MaterialType { Wood, Stone, Iron, Gold, Leather, Bone, Ectoplasm, GhostOrb, Livingwood, Ruby, Sapphire, Diamond, Dragonscale}
 public enum MaterialTrait { None, Flawed, Flawless }
 public enum MaterialSize { Normal, Small, Big }
 public enum ResistanceType { None, Fire, IceWater, Physical, All }

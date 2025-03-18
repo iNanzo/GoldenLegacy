@@ -12,12 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d2227fb6fce352428e623f786360bc3, type: 3}
   m_Name: GoblinWarrior
   m_EditorClassIdentifier: 
-  monsterName: Monster
-  rarity: 0
-  minHP: 5
-  maxHP: 10
-  minDamage: 1
-  maxDamage: 3
-  materialLootTable: []
-  possibleTraits: 
+  monsterName: Goblin Warrior
+  rarity: 1
+  minHP: 65
+  maxHP: 90
+  minDamage: 30
+  maxDamage: 40
+  materialLootTable:
+  - material: {fileID: 11400000, guid: 7bd0ef820a9c2904faf4c4911c1e1855, type: 2}
+    dropChance: 25
+  possibleTraits: 010000000200000003000000
   canBeLargeOrSmall: 1

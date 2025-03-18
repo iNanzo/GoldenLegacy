@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 290e73e6960128d4ebf298ffb71911bd, type: 3}
-  m_Name: Leather
+  m_Name: Diamond
   m_EditorClassIdentifier: 
   itemType: 0
-  materialType: 4
-  minAttack: 1
-  maxAttack: 2
-  hpBonus: 5
-  goldBonus: 10
+  materialType: 11
+  minAttack: 0
+  maxAttack: 0
+  hpBonus: 0
+  goldBonus: 100
   specialEffect: 0
   materialTrait: 0
   materialSize: 0
