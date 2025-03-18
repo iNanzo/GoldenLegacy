@@ -35,18 +35,18 @@ public class EquipmentManager : MonoBehaviour
     {
         equipmentPanel.SetActive(false);
     }
-
     public void EquipItem(MaterialData item)
     {
         CraftableItemType itemType = GetItemType(item);
 
-        // ✅ If item is already equipped, unequip it
+        // ✅ If item is already equipped in the same slot, unequip it instead
         if (equippedItems.ContainsKey(itemType) && equippedItems[itemType] == item)
         {
             UnequipItem(itemType);
             return;
         }
 
+        // ✅ Ensure the player can equip one of EACH item type
         equippedItems[itemType] = item;
         UpdatePlayerStats();
         UpdateEquipmentUI();
@@ -81,7 +81,7 @@ public class EquipmentManager : MonoBehaviour
         {
             totalAttack += item.minAttack;
             totalHP += item.hpBonus;
-            totalGoldBonus += item.goldBonus;
+            //totalGoldBonus += item.goldBonus;
         }
 
         Debug.Log($"🛠 Calculated Player Stats - ATK: {totalAttack}, HP: {totalHP}, Gold Bonus: {totalGoldBonus}");
@@ -145,9 +145,6 @@ public class EquipmentManager : MonoBehaviour
 
     CraftableItemType GetItemType(MaterialData item)
     {
-        if (item.materialType == MaterialType.Iron || item.materialType == MaterialType.Gold) return CraftableItemType.Sword;
-        if (item.materialType == MaterialType.Leather) return CraftableItemType.Armor;
-        if (item.materialType == MaterialType.Dragonscale) return CraftableItemType.Helmet;
-        return CraftableItemType.Ring;
+        return item.itemType; // ✅ Return the item type that was assigned during crafting
     }
 }

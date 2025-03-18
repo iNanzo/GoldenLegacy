@@ -76,15 +76,16 @@ public class CraftingSystem : MonoBehaviour
             return null;
         }
 
-        craftedItem.name = recipe.itemType.ToString();
-        craftedItem.materialType = MaterialType.Gold;
+        craftedItem.name = recipe.itemType.ToString(); // ✅ Name the item correctly
+        craftedItem.itemType = recipe.itemType; // ✅ Assign item type upon crafting
+        craftedItem.materialType = MaterialType.Gold; // Placeholder type
         craftedItem.minAttack = recipe.GetTotalAttack();
         craftedItem.hpBonus = recipe.GetTotalHP();
         craftedItem.goldBonus = recipe.GetTotalGoldValue();
         craftedItem.materialTrait = MaterialTrait.Flawless;
         craftedItem.materialSize = MaterialSize.Normal;
 
-        Debug.Log($"🛠 Created crafted item: {craftedItem.name}");
+        Debug.Log($"🛠 Created crafted item: {craftedItem.name} ({craftedItem.itemType})");
         return craftedItem;
     }
 

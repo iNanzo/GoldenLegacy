@@ -47,6 +47,11 @@ public class Player : MonoBehaviour
         }
     }
 
+    public int GetAttackPower()
+    {
+        Debug.Log("✅ GetAttackPower() called!");
+        return attack;
+    }
     void Die()
     {
         Debug.Log("Player died!");
@@ -73,7 +78,7 @@ public class Player : MonoBehaviour
     {
         attack = baseAttack + extraAttack;
         maxHealth = baseMaxHealth + extraHP;
-        goldMultiplier = baseGoldMultiplier + extraGold;
+        //goldMultiplier = baseGoldMultiplier + extraGold;
 
         Debug.Log($"💪 Player Stats Applied - ATK: {attack}, Max HP: {maxHealth}, Gold Multiplier: {goldMultiplier}");
 

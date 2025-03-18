@@ -10,6 +10,7 @@ public enum SpecialEffect { None, AgilityBoost, HPRegen, FireDamage, MagicBoost,
 [CreateAssetMenu(fileName = "NewMaterial", menuName = "Crafting/Create New Material")]
 public class MaterialData : ScriptableObject
 {
+    public CraftableItemType itemType; // ✅ Stores assigned item type upon crafting
     public MaterialType materialType;
 
     [Header("Base Stats")]

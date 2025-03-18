@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
 public class Monster : MonoBehaviour
@@ -10,10 +11,12 @@ public class Monster : MonoBehaviour
     private MonsterSize sizeModifier;
     private StateMachine stateMachine;
     private Player player;
+    private SpriteRenderer spriteRenderer;
 
     void Start()
     {
         player = Object.FindFirstObjectByType<Player>();
+        spriteRenderer = GetComponent<SpriteRenderer>(); // ✅ Get SpriteRenderer for visual effects
 
         currentHealth = Random.Range(monsterData.minHP, monsterData.maxHP + 1);
         attackPower = Random.Range(monsterData.minDamage, monsterData.maxDamage + 1);
@@ -30,12 +33,15 @@ public class Monster : MonoBehaviour
         if (monsterData.canBeLargeOrSmall)
         {
             float roll = Random.value;
-            if (roll < 0.25f) sizeModifier = MonsterSize.Large;
-            else if (roll > 0.75f) sizeModifier = MonsterSize.Small;
+            if (roll < 0.15f) sizeModifier = MonsterSize.Giant; // ✅ 15% chance for Giant
+            else if (roll < 0.30f) sizeModifier = MonsterSize.Large;
+            else if (roll > 0.75f && roll < 0.90f) sizeModifier = MonsterSize.Small;
+            else if (roll >= 0.90f) sizeModifier = MonsterSize.Tiny; // ✅ 10% chance for Tiny
             else sizeModifier = MonsterSize.Normal;
         }
 
         ApplySizeModifiers();
+        ApplyVisualEffects(); // ✅ Apply effects based on monster traits
 
         Debug.Log($"{GetMonsterName()} spawned with {currentHealth} HP, {attackPower} Attack, and Trait: {currentTrait}");
 
@@ -47,20 +53,52 @@ public class Monster : MonoBehaviour
 
     void ApplySizeModifiers()
     {
-        if (sizeModifier == MonsterSize.Large)
+        if (sizeModifier == MonsterSize.Giant)
+        {
+            currentHealth = Mathf.RoundToInt(currentHealth * 1.5f);
+            attackPower = Mathf.RoundToInt(attackPower * 1.3f);
+            transform.localScale *= 2.5f; // ✅ Massive size
+        }
+        else if (sizeModifier == MonsterSize.Large)
         {
             currentHealth = Mathf.RoundToInt(currentHealth * 1.2f);
             attackPower = Mathf.RoundToInt(attackPower * 1.05f);
+            transform.localScale *= 1.5f;
         }
         else if (sizeModifier == MonsterSize.Small)
         {
             currentHealth = Mathf.RoundToInt(currentHealth * 0.9f);
             attackPower = Mathf.RoundToInt(attackPower * 0.9f);
+            transform.localScale *= 0.5f;
+        }
+        else if (sizeModifier == MonsterSize.Tiny)
+        {
+            currentHealth = Mathf.RoundToInt(currentHealth * 0.7f);
+            attackPower = Mathf.RoundToInt(attackPower * 0.7f);
+            transform.localScale *= 0.25f; // ✅ Tiny size
         }
     }
 
+    void ApplyVisualEffects()
+    {
+        if (spriteRenderer == null) return;
+
+        if (currentTrait == MonsterTrait.Vampiric)
+        {
+            spriteRenderer.color = Color.red; // ✅ Red if Vampiric
+        }
+        else if (currentTrait == MonsterTrait.Golden)
+        {
+            spriteRenderer.color = Color.yellow; // ✅ Gold if Golden
+        }
+    }
     void Update()
     {
+        if (stateMachine != null && currentHealth > 0)
+        {
+            stateMachine.UpdateMonsterHPText(); // ✅ Ensure HP updates properly
+        }
+
         if (stateMachine.zoneActive())
         {
             Debug.Log("Destroying monster due to player death.");
@@ -77,10 +115,51 @@ public class Monster : MonoBehaviour
 
     void OnMouseDown()
     {
-        TakeDamage(1);
+        if (player == null)
+        {
+            player = FindFirstObjectByType<Player>(); // ✅ Find the player
+            if (player == null)
+            {
+                Debug.LogError("❌ Player not found in scene! Cannot apply attack.");
+                return;
+            }
+        }
+
+        int playerAttack = player.GetAttackPower(); // ✅ Fetch player's attack stat
+        Debug.Log($"⚔️ Player attacks for {playerAttack} damage!");
+        
+        StartCoroutine(FlashWhite()); // ✅ White Flash Effect for attack feedback
+        TakeDamage(playerAttack); // ✅ Apply correct damage
+
         if (currentHealth > 0)
         {
             Retaliate();
+        }
+    }
+    IEnumerator FlashWhite()
+    {
+        if (spriteRenderer != null)
+        {
+            Color originalColor = spriteRenderer.color;
+
+            // If monster is default white, make it light gray instead
+            if (originalColor == Color.white)
+            {
+                spriteRenderer.color = new Color(0.8f, 0.8f, 0.8f); // Light gray flash for default monsters
+            }
+            else
+            {
+                // Brighten existing color
+                spriteRenderer.color = new Color(
+                    Mathf.Min(originalColor.r + 0.5f, 1f), // Lighten Red
+                    Mathf.Min(originalColor.g + 0.5f, 1f), // Lighten Green
+                    Mathf.Min(originalColor.b + 0.5f, 1f)  // Lighten Blue
+                );
+            }
+
+            yield return new WaitForSeconds(0.1f);
+
+            spriteRenderer.color = originalColor; // Restore original color
         }
     }
 
@@ -151,11 +230,17 @@ public class Monster : MonoBehaviour
     public string GetMonsterName()
     {
         List<string> modifiers = new List<string>();
+
         if (sizeModifier != MonsterSize.Normal) modifiers.Add(sizeModifier.ToString());
         if (currentTrait != MonsterTrait.None) modifiers.Add(currentTrait.ToString());
-        return string.Join(" ", modifiers) + " " + monsterData.monsterName;
-    }
 
+        // ✅ Ensure monsterData exists and has a valid name
+        string baseName = (monsterData != null && !string.IsNullOrEmpty(monsterData.monsterName)) 
+            ? monsterData.monsterName 
+            : "Unknown Monster";
+
+        return string.Join(" ", modifiers) + " " + baseName;
+    }
 
     // Returns the monster's current HP for UI display
     public int GetCurrentHP()

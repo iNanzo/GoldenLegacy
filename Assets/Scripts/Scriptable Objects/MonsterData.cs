@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public enum MonsterRarity { Common, Uncommon, Rare, Legendary }
 public enum MonsterTrait { None, Berserk, Vampiric, Golden }
-public enum MonsterSize { Normal, Large, Small }
+public enum MonsterSize { Normal, Large, Small, Tiny, Giant }
 
 [System.Serializable]
 public class LootEntry
@@ -49,8 +49,10 @@ public class MonsterData : ScriptableObject
         // Size-based multipliers
         Dictionary<MonsterSize, float> sizeMultipliers = new Dictionary<MonsterSize, float>
         {
-            { MonsterSize.Large, 1.1f },
-            { MonsterSize.Small, 0.9f }
+            { MonsterSize.Giant, 1.5f },
+            { MonsterSize.Large, 1.25f },
+            { MonsterSize.Small, 0.9f },
+            { MonsterSize.Tiny, 0.7f }
         };
 
         if (traitMultipliers.TryGetValue(trait, out float traitMult))
