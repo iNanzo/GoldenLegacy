@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a93210ec6cd22014fbe2d3b4d993fa21, type: 3}
   m_Name: Helmet
   m_EditorClassIdentifier: 
-  itemType: 0
-  requiredMaterials: []
+  itemType: 1
+  requiredMaterials:
+  - {fileID: 0}
   crystalSlot: {fileID: 0}

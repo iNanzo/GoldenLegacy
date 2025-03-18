@@ -242,8 +242,16 @@ public class CraftingUI : MonoBehaviour
             player.inventory.RemoveItem(selectedCrystal);
         }
 
-        player.GetComponent<CraftingSystem>().CraftItem(selectedRecipe, selectedMaterials.ToArray(), selectedCrystal);
-        craftingPanel.SetActive(false);
+        Debug.Log("✅ Entering ConfirmCraft()...");
+        
+        var craftingSystem = player.GetComponent<CraftingSystem>();
+        if (craftingSystem == null)
+        {
+            Debug.LogError("❌ CraftingSystem is missing from Player!");
+            return;
+        }
+
+        craftingSystem.CraftItem(selectedRecipe, selectedMaterials.ToArray(), selectedCrystal);
 
         craftResultText.text = $"✅ {selectedRecipe.itemType} added to inventory!";
         ResetCraftingPanel();

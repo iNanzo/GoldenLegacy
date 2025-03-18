@@ -3,7 +3,14 @@ using TMPro;
 
 public class Player : MonoBehaviour
 {
-    public int maxHealth = 10;
+    public int baseAttack = 5; // Default attack value
+    public int baseMaxHealth = 10; // Default max HP
+    public int baseGoldMultiplier = 1; // Default gold multiplier
+
+    private int attack;
+    private int maxHealth;
+    private int goldMultiplier;
+
     private int currentHealth;
     public int gold = 0;
 
@@ -15,7 +22,10 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        currentHealth = maxHealth;
+        currentHealth = baseMaxHealth;
+        attack = baseAttack;
+        maxHealth = baseMaxHealth;
+        goldMultiplier = baseGoldMultiplier;
         UpdateUI();
     }
 
@@ -49,7 +59,7 @@ public class Player : MonoBehaviour
 
     public void AddGold(int amount)
     {
-        gold += amount;
+        gold += amount * goldMultiplier; // ✅ Gold multiplier applies
         UpdateUI();
         Debug.Log($"Player received {amount} gold! Total Gold: {gold}");
     }
@@ -59,11 +69,27 @@ public class Player : MonoBehaviour
         currentHealth = maxHealth;
         UpdateUI();
     }
+    public void SetStats(int extraAttack, int extraHP, int extraGold)
+    {
+        attack = baseAttack + extraAttack;
+        maxHealth = baseMaxHealth + extraHP;
+        goldMultiplier = baseGoldMultiplier + extraGold;
+
+        Debug.Log($"💪 Player Stats Applied - ATK: {attack}, Max HP: {maxHealth}, Gold Multiplier: {goldMultiplier}");
+
+        // ✅ Make sure the player’s HP updates in case of max HP changes
+        if (currentHealth > maxHealth)
+        {
+            currentHealth = maxHealth;
+        }
+
+        UpdateUI();
+    }
 
     void UpdateUI()
     {
         if (healthText != null)
-            healthText.SetText($"HP: {currentHealth}");
+            healthText.SetText($"HP: {currentHealth} / {maxHealth}");
 
         if (goldText != null)
             goldText.SetText($"Gold: {gold}");

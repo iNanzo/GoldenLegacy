@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: Sword
   m_EditorClassIdentifier: 
   itemType: 0
-  requiredMaterials: []
+  requiredMaterials:
+  - {fileID: 0}
+  - {fileID: 0}
   crystalSlot: {fileID: 0}

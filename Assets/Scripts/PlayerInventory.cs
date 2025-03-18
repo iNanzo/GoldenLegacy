@@ -9,6 +9,7 @@ public class PlayerInventory : MonoBehaviour
 
     private List<MaterialData> inventory = new List<MaterialData>();
     private bool inventoryVisible = false;
+    private List<MaterialData> craftedItems = new List<MaterialData>();
 
     void Start()
     {
@@ -66,6 +67,48 @@ public class PlayerInventory : MonoBehaviour
         else
         {
             Debug.LogWarning("Tried to remove a material not in inventory.");
+        }
+    }
+
+    // ✅ New methods for handling crafted items
+    public void AddCraftedItem(MaterialData item)
+    {
+        if (item == null)
+        {
+            Debug.LogError("❌ Tried to add NULL crafted item!");
+            return;
+        }
+
+        craftedItems.Add(item);
+        Debug.Log($"✅ Successfully added crafted item: {item.name}");
+
+        // ✅ Debug List Contents
+        Debug.Log($"📦 Crafted Items in Inventory ({craftedItems.Count}):");
+        foreach (var crafted in craftedItems)
+        {
+            Debug.Log($"- {crafted.name} | ATK: {crafted.minAttack}, HP: {crafted.hpBonus}, Value: {crafted.goldBonus}g");
+        }
+    }
+
+    public List<MaterialData> GetCraftedItems()
+    {
+        if (craftedItems.Count == 0)
+        {
+            Debug.Log("⚠️ No crafted items available.");
+        }
+        return craftedItems;
+    }
+
+    public void RemoveCraftedItem(MaterialData item)
+    {
+        if (craftedItems.Contains(item))
+        {
+            craftedItems.Remove(item);
+            Debug.Log($"✅ Removed crafted item: {item.name}");
+        }
+        else
+        {
+            Debug.LogWarning("❌ Tried to remove a crafted item that isn't in the inventory.");
         }
     }
 }
